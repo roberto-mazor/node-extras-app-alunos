@@ -1,0 +1,29 @@
+{
+  "name": "loja-ze",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gutoffline/node-aula.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gutoffline/node-aula/issues"
+  },
+  "homepage": "https://github.com/gutoffline/node-aula#readme",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql": "^2.18.1",
+    "nodemon": "^3.1.11"
+  }
+}
