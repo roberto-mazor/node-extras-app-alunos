@@ -14,6 +14,14 @@ Este projeto oferece:
 - Node.js 16+
 - MySQL acessível (configuração em `index.js`)
 
+## 📦 Dependências
+
+- `express`: Framework web para Node.js
+- `mysql`: Driver MySQL para Node.js
+- `cors`: Middleware para habilitar CORS
+- `dotenv`: Carregamento de variáveis de ambiente
+- `nodemon`: Ferramenta para desenvolvimento (reinício automático)
+
 ## 🧭 Como rodar
 
 1. Clone o repositório
@@ -21,22 +29,18 @@ Este projeto oferece:
    ```bash
    npm install
    ```
-3. Crie um arquivo `.env` na raiz do projeto (não há `.env.example` neste repositório):
+3. Crie um arquivo `.env` a partir do exemplo:
    ```bash
-   type nul > .env
-   ```
-   Adicione as variáveis:
-   ```ini
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=senha_do_banco
-   DB_NAME=nome_do_banco
-   PORT=3000
+   cp .env.example .env
    ```
    Atualize os valores conforme seu banco.
 4. Execute o servidor:
    ```bash
-   node index.js
+   npm start
+   ```
+   Ou para desenvolvimento (com nodemon):
+   ```bash
+   npm run dev
    ```
 5. Acesse os endpoints em `http://localhost:3000`
 
