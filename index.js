@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 
@@ -6,7 +6,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const mysql = require('mysql');
+const mysql = require('mysql')
 
 let conexao = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -18,7 +18,7 @@ let conexao = mysql.createConnection({
 conexao.connect(function (erro) {
   if (erro) {
     console.log("Deu ruim na conexão \n")
-    throw erro;
+    throw erro
   } else {
     console.log("Conexão deu bom \n")
   }
@@ -82,7 +82,7 @@ app.post("/produto/", function (req, res) {
       return res.status(500).json({ status: 500, error: erro.message || erro })
     }
     res.status(201).json({ status: 201, insertId: resultado.insertId })
-  });
+  })
 })
 
 
