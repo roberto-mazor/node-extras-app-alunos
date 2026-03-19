@@ -6,12 +6,12 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-let mysql = require('mysql');
+const mysql = require('mysql');
 
 let conexao = mysql.createConnection({
   host: "108.179.193.209",
-  user: "",
-  password: "",
+  user: "gutoxa27_alunos",
+  password: "JD_eXLNHp1ZG",
   database: "gutoxa27_bd_loja"
 })
 
