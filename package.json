@@ -9,20 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gutoffline/node-aula.git"
+    "url": "git+https://github.com/gutoffline/node-extras-app-alunos.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gutoffline/node-aula/issues"
+    "url": "https://github.com/gutoffline/node-extras-app-alunos/issues"
   },
-  "homepage": "https://github.com/gutoffline/node-aula#readme",
+  "homepage": "https://github.com/gutoffline/node-extras-app-alunos#readme",
   "dependencies": {
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "jsonwebtoken": "^9.0.3",
     "mysql": "^2.18.1",
     "nodemon": "^3.1.11"
   }

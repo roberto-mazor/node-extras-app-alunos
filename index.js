@@ -1,6 +1,6 @@
+require('dotenv').config();
 const express = require('express')
 const cors = require('cors')
-
 
 const app = express()
 app.use(cors())
@@ -9,10 +9,10 @@ app.use(express.json())
 const mysql = require('mysql');
 
 let conexao = mysql.createConnection({
-  host: "108.179.193.209",
-  user: "gutoxa27_alunos",
-  password: "JD_eXLNHp1ZG",
-  database: "gutoxa27_bd_loja"
+  host: process.env.DB_HOST || "108.179.193.209",
+  user: process.env.DB_USER || "gutoxa27_alunos",
+  password: process.env.DB_PASSWORD || "JD_eXLNHp1ZG",
+  database: process.env.DB_NAME || "gutoxa27_bd_loja"
 })
 
 conexao.connect(function (erro) {
@@ -41,32 +41,47 @@ app.get("/produto/:id", function (req, res) {
 app.put("/produto/:id", function (req, res) {
   const id = req.params.id
   const data = req.body
-
-  conexao.query(`UPDATE produtos set ? where id = ${id}`, [data], function (erro, resultado) {
+  conexao.query("UPDATE produtos set ? where id = ?", [data, id], function (erro, resultado) {
     if (erro) {
-      res.send(erro)
+      return res.status(500).json({ status: 500, error: erro.message || erro })
     }
-    res.json({ "status": 200, "message": "Atualizado com sucesso!" })
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ status: 404, message: "Produto não encontrado" })
+    }
+    res.json({ status: 200, message: "Atualizado com sucesso!" })
   })
 })
 
 app.delete("/produto/:id", function (req, res) {
   const id = req.params.id
-  conexao.query(`delete from produtos where id = ${id}`, function (erro, resultado) {
+  conexao.query("DELETE FROM produtos WHERE id = ?", [id], function (erro, resultado) {
     if (erro) {
-      res.send(erro)
+      return res.status(500).json({ status: 500, error: erro.message || erro })
     }
-    res.json({ "status": 200, "message": "Excluído com sucesso!" })
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ status: 404, message: "Produto não encontrado" })
+    }
+    res.json({ status: 200, message: "Excluído com sucesso!" })
   })
 })
 
 app.post("/produto/", function (req, res) {
   const data = req.body
+  if (!data || typeof data.nome !== 'string' || data.nome.trim() === '') {
+    return res.status(400).json({ status: 400, message: 'O campo nome é obrigatório e deve ser uma string.' })
+  }
+  if (typeof data.preco !== 'number' || Number.isNaN(data.preco)) {
+    return res.status(400).json({ status: 400, message: 'O campo preco é obrigatório e deve ser número.' })
+  }
+  if (typeof data.estoque !== 'number' || Number.isNaN(data.estoque)) {
+    return res.status(400).json({ status: 400, message: 'O campo estoque é obrigatório e deve ser número.' })
+  }
+
   conexao.query('INSERT INTO produtos set ?', [data], function (erro, resultado) {
     if (erro) {
-      res.send(erro)
+      return res.status(500).json({ status: 500, error: erro.message || erro })
     }
-    res.send(resultado.insertId)
+    res.status(201).json({ status: 201, insertId: resultado.insertId })
   });
 })
 
@@ -99,4 +114,7 @@ app.delete("/usuarios/:id", function (req, res) {
 
 
 
-app.listen(3000)
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`)
+})

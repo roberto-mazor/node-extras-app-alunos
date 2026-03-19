@@ -4,15 +4,15 @@ API REST simples com Node.js, Express e MySQL para gerenciar produtos e usuário
 
 ## 🚀 Visão geral
 
-Este projeto expõe endpoints para:
-- Listar produtos e produto por ID (MySQL)
-- Criar, atualizar e remover produtos (MySQL)
-- Operações CRUD básicas em usuários em memória (array)
+Este projeto oferece:
+- CRUD de produtos conectado a MySQL
+- CRUD de usuários em memória (array)
+- Exemplo prático de rotas Express e uso de `mysql` com query builder simples
 
 ## ▶️ Requisitos
 
-- Node.js 16+ instalado
-- MySQL acessível (já configurado no código com host, usuário, senha, database)
+- Node.js 16+
+- MySQL acessível (configuração em `index.js`)
 
 ## 🧭 Como rodar
 
@@ -21,24 +21,35 @@ Este projeto expõe endpoints para:
    ```bash
    npm install
    ```
-3. Inicie o servidor:
+3. Crie um arquivo `.env` a partir do exemplo:
+   ```bash
+   cp .env.example .env
+   ```
+   Atualize os valores conforme seu banco.
+4. Execute o servidor:
    ```bash
    node index.js
    ```
-4. Acesse: `http://localhost:3000`
+5. Acesse os endpoints em `http://localhost:3000`
+
+> ⚠️ A conexão MySQL usa variáveis de ambiente via `.env` (dotenv). O arquivo `.env` não deve ser comitado.
 
 ## 🧩 Endpoints da API
 
 ### Produtos (MySQL)
 
 - `GET /produtos`
-  - Retorna todos os produtos (`SELECT * FROM produtos ORDER BY id DESC`)
+  - Retorna todos os produtos em ordem decrescente de `id`
 
 - `GET /produto/:id`
-  - Retorna o produto com o ID informado
+  - Retorna o produto específico pelo `id`
 
-- `POST /produto`
-  - Insere novo produto. Enviar JSON no body com os campos da tabela `produtos`
+- `POST /produto/`
+  - Cria um novo produto com JSON no corpo
+  - Validação mínima:
+    - `nome`: string não vazia
+    - `preco`: número
+    - `estoque`: número
   - Exemplo:
     ```json
     {
@@ -47,45 +58,59 @@ Este projeto expõe endpoints para:
       "estoque": 12
     }
     ```
+  - Retorna JSON:
+    ```json
+    { "status": 201, "insertId": 1 }
+    ```
 
 - `PUT /produto/:id`
-  - Atualiza produto por ID. Enviar JSON com os campos a alterar.
-  - Exemplo:
+  - Atualiza campos do produto pelo `id`
+  - Use JSON com os campos a atualizar:
     ```json
     {
       "nome": "Caneca Nova",
-      "preco": 35.5
+      "preco": 35.5,
+      "estoque": 10
     }
     ```
+  - Retorna JSON de status com mensagem
 
 - `DELETE /produto/:id`
-  - Remove produto por ID
+  - Remove o produto
+  - Retorna JSON de status com mensagem
 
 ### Usuários (in-memory)
 
-- `GET /usuarios`
-  - Retorna lista de usuários em memória
+- `GET /usuarios/`
+  - Retorna todos os usuários do array em memória
 
-- `POST /usuarios`
-  - Adiciona usuário. Body JSON: `{ "nome": "novo" }`
+- `POST /usuarios/`
+  - Adiciona usuário: `{ "nome": "nome" }`
+  - Retorna mensagem de sucesso
 
 - `PUT /usuarios/:id`
-  - Atualiza usuário pelo índice (1-based). Body JSON: `{ "nome": "atualizado" }`
+  - Atualiza usuário pelo índice 1-based: `{ "nome": "novo nome" }`
+  - Retorna mensagem de sucesso
 
 - `DELETE /usuarios/:id`
-  - Remove usuário pelo índice (1-based)
+  - Remove usuário pelo índice 1-based (usando `delete` no array)
+  - Retorna mensagem de sucesso
 
-## 🔐 Observações importantes
+## 🛑 Observações
 
-- A conexão MySQL está hardcoded em `index.js`. Para produção, use variáveis de ambiente e validação.
-- O endpoint de usuários não persiste depois que o servidor reinicia.
-- O projeto funciona como exemplo básico de CRUD com Express + MySQL.
+- Usuários são mantidos apenas em memória e não persistem após restart.
+- SQL no código é construído com template string em alguns endpoints. Não use esse padrão em produção (risco de injeção SQL).
+- Para produção:
+  1. Use variáveis de ambiente para host, user, password, database
+  2. Use validação e tratamento centralizado de erros
+  3. Use ORM ou query builder (Sequelize, Knex) para segurança
 
-## ✅ Melhorias sugeridas
+## ✅ Melhorias recomendadas
 
-- Usar `.env` para credenciais de banco
-- Validar dados de entrada com `express-validator` ou JOI
-- Implementar tratamento de erros mais robusto
-- Separar rotas/controllers em módulos
+- Configurar `.env` e `dotenv`
+- Separar rotas e controllers em arquivos/module
+- Criar camada de serviço/banco com pool de conexões MySQL
+- Adicionar testes unitários e de integração
+- Implementar autenticação/autorizações para recursos protegidos
 
 
